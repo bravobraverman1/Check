@@ -1,0 +1,18 @@
+name: Deploy ai-worker Edge Function
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/ai-worker/**'
+      - 'supabase/functions/_shared/**'
+      - '.github/workflows/deploy-ai-worker.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/_deploy-edge-function.yml
+    with:
+      function_name: ai-worker
+      extra_args: --no-verify-jwt
+    secrets: inherit

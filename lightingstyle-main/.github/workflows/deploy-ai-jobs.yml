@@ -1,0 +1,17 @@
+name: Deploy ai-jobs Edge Function
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/ai-jobs/**'
+      - 'supabase/functions/_shared/**'
+      - '.github/workflows/deploy-ai-jobs.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/_deploy-edge-function.yml
+    with:
+      function_name: ai-jobs
+    secrets: inherit
