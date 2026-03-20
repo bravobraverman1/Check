@@ -1,0 +1,5 @@
+{
+  "name": "GitHub Dashboard",
+  "description": "A modern dashboard to explore your GitHub repositories, stars, and profile.",
+  "requestFramePermissions": []
+}
