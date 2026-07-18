@@ -11,6 +11,9 @@ on:
       - '.github/workflows/compile-cheatsheet.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   compile:
     runs-on: ubuntu-latest
@@ -23,8 +26,15 @@ jobs:
           working_directory: .
           latexmk_use_xelatex: false
           args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
-      - name: Copy output
-        run: cp chatgpt-temp/TAU_Probability_Statistics_Final_Precision.pdf TAU_Probability_Statistics_Final_Precision.pdf
+      - name: Store compiled PDF
+        if: github.event_name != 'pull_request'
+        run: |
+          cp TAU_Probability_Statistics_Final_Precision.pdf chatgpt-temp/TAU_Probability_Statistics_Final_Precision.pdf
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add chatgpt-temp/TAU_Probability_Statistics_Final_Precision.pdf
+          git commit -m 'Store compiled probability cheat sheet PDF' || exit 0
+          git push
       - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
