@@ -5,6 +5,10 @@ on:
     paths:
       - 'chatgpt-temp/TAU_Probability_Statistics_Final_Precision.tex'
       - '.github/workflows/compile-cheatsheet.yml'
+  pull_request:
+    paths:
+      - 'chatgpt-temp/TAU_Probability_Statistics_Final_Precision.tex'
+      - '.github/workflows/compile-cheatsheet.yml'
   workflow_dispatch:
 
 jobs:
