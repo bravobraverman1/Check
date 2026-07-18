@@ -23,10 +23,11 @@ jobs:
           working_directory: .
           latexmk_use_xelatex: false
           args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
-      - name: Copy output
-        run: cp chatgpt-temp/TAU_Probability_Statistics_Final_Precision.pdf TAU_Probability_Statistics_Final_Precision.pdf
+      - name: Locate output
+        run: find . -name 'TAU_Probability_Statistics_Final_Precision.pdf' -print
       - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
           name: probability-cheat-sheet-pdf
           path: TAU_Probability_Statistics_Final_Precision.pdf
+# temporary PR compilation trigger 2
