@@ -1,0 +1,493 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[hebrew,english]{babel}
+\usepackage{culmus}
+\usepackage[margin=4.5mm,top=4.0mm,bottom=4.0mm]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{array,booktabs}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{needspace}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{2.35mm}
+\setlength{\columnseprule}{0.15pt}
+\setlength{\abovedisplayskip}{0.75pt}
+\setlength{\belowdisplayskip}{0.75pt}
+\setlength{\abovedisplayshortskip}{0.35pt}
+\setlength{\belowdisplayshortskip}{0.35pt}
+\setlength{\jot}{0.2pt}
+\setlist[itemize]{leftmargin=1.08em,itemsep=0pt,topsep=.25pt,parsep=0pt,partopsep=0pt}
+\setlist[enumerate]{leftmargin=1.2em,itemsep=0pt,topsep=.25pt,parsep=0pt,partopsep=0pt}
+
+\definecolor{navy}{HTML}{123B5D}
+\definecolor{teal}{HTML}{006D77}
+\definecolor{bluefill}{HTML}{EAF3F8}
+\definecolor{orange}{HTML}{B45309}
+\definecolor{orangefill}{HTML}{FFF2DE}
+\definecolor{red}{HTML}{A12A2A}
+\definecolor{redfill}{HTML}{FDECEC}
+\definecolor{purple}{HTML}{674188}
+\definecolor{hebrewcolor}{HTML}{5B4A68}
+
+\newcommand{\sect}[1]{\vspace{.85pt}\noindent\colorbox{navy}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\color{white}\bfseries\fontsize{7.55}{7.9}\selectfont #1}}\vspace{.55pt}}
+\newcommand{\subh}[1]{\vspace{.25pt}{\color{teal}\bfseries #1}\enspace}
+\newcommand{\trap}[1]{\textcolor{red}{\bfseries Trap:} #1}
+\newcommand{\checkit}[1]{\textcolor{teal}{\bfseries Check:} #1}
+\newcommand{\ex}[1]{\textcolor{purple}{\bfseries Ex:} #1}
+\newcommand{\heb}[1]{%
+  \mbox{\foreignlanguage{hebrew}{\R{#1}}}%
+}
+\newcommand{\hebref}[1]{{\textcolor{hebrewcolor}{\fontsize{5.65}{5.9}\selectfont\itshape Lookup: \heb{#1}}}}
+\newcommand{\given}{\,|\,}
+\newcommand{\ind}{\perp\!\!\!\perp}
+\newcommand{\Pois}{\operatorname{Poi}}
+\newcommand{\Bin}{\operatorname{Bin}}
+\newcommand{\Geo}{\operatorname{Geo}}
+\newcommand{\NB}{\operatorname{NB}}
+\newcommand{\HG}{\operatorname{HG}}
+\newcommand{\Exp}{\operatorname{Exp}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\MSE}{\operatorname{MSE}}
+
+\newtcolorbox{flowbox}[1][]{colback=bluefill,colframe=teal,boxrule=.35pt,arc=.45mm,left=.7mm,right=.7mm,top=.36mm,bottom=.36mm,before skip=.55pt,after skip=.55pt,breakable,#1}
+\newtcolorbox{warnbox}[1][]{colback=redfill,colframe=red,boxrule=.35pt,arc=.45mm,left=.7mm,right=.7mm,top=.36mm,bottom=.36mm,before skip=.55pt,after skip=.55pt,breakable,#1}
+\newtcolorbox{exbox}[1][]{colback=orangefill,colframe=orange,boxrule=.35pt,arc=.45mm,left=.7mm,right=.7mm,top=.36mm,bottom=.36mm,before skip=.55pt,after skip=.55pt,breakable,#1}
+\hyphenation{workflow likelihood conditional probability approximation hypergeometric covariance}
+\AtBeginDocument{\fontsize{7.08}{7.48}\selectfont\RaggedRight\sloppy\emergencystretch=1.1em}
+
+\begin{document}
+\begin{multicols}{3}
+\fontsize{7.08}{7.48}\selectfont
+
+{\centering\bfseries\color{navy}\fontsize{9.0}{9.25}\selectfont Probability \& Statistics Exam Guide\par}
+{\centering\fontsize{6.05}{6.3}\selectfont Standard PMFs/PDFs and many identities are on the supplied sheet. This guide emphasizes meaning, recognition, setup and reusable exam patterns.\par}
+
+\sect{0. Start every subpart}
+\begin{flowbox}
+\textbf{Define} the RV/event in words; write its \textbf{support}; identify the model or theorem and its assumptions; set parameters with units; translate the requested event exactly; compute; then check range, normalization and limiting sense.
+\end{flowbox}
+\[
+\mu=E[X],\qquad \sigma^2=\Var(X),\qquad \sigma=\sqrt{\Var(X)}.
+\]
+Useful translations: ``at least one'' $=1-P(0)$; $T_k\le t\iff N(t)\ge k$; $\max_iX_i\le t$ means every $X_i\le t$; $\min_iX_i>t$ means every $X_i>t$.
+
+\sect{1. Conditioning, total probability and Bayes}
+Conditioning changes the sample space to the information already known. Thus $P(A\mid B)$ asks what fraction of the remaining $B$-world also satisfies $A$. \hebref{הסתברות\ מותנה}
+
+\subh{Which conditioning tool?}
+``Given that'' $\to$ condition directly. A hidden case, random size or random composition $\to$ solve within each case and average. Reversing evidence and cause $\to$ Bayes. A simple conditional distribution but awkward marginal $\to$ total expectation.
+\[
+\begin{aligned}
+P(A)&=\sum_hP(A\mid H=h)P(H=h),\\
+E[X]&=E(E[X\mid H]).
+\end{aligned}
+\]
+\hebref{נוסחת\ ההסתברות\ השלמה}\quad \hebref{משפט\ התוחלת\ השלמה}
+Bayes weights each possible cause by ``prior $\times$ likelihood of the evidence'' and normalizes:
+\[
+P(H_j\mid A)=\frac{P(A\mid H_j)P(H_j)}{\sum_iP(A\mid H_i)P(H_i)}.
+\]
+If $L=W^c$, then within any information event $A$ with $P(A)>0$,
+\[
+P(L\mid A)=1-P(W\mid A).
+\]
+\trap{Do not complement only the numerator; the complement is taken inside the conditioned sample space.}
+
+\sect{2. Counting and choosing a discrete model}
+\subh{Counting first} \hebref{קומבינטוריקה}
+Use favorable/total only when elementary outcomes are equally likely. Ask: does order matter? replacement? must objects be together or separated? ``At least one'' is often a complement; ``every type appears'' often inclusion--exclusion.
+
+\subh{Distribution recognition} \hebref{התפלגויות\ בדידות}
+\begin{itemize}
+\item One yes/no trial $\to$ Bernoulli.
+\item Successes in a \emph{fixed} number of independent trials with constant $p$ $\to\Bin(n,p)$.
+\item Sample without replacement from a finite population $\to\HG(N,D,n)$.
+\item Trials through first / $r$th success $\to\Geo(p)$ / $\NB(r,p)$; the successful trial is counted.
+\item Events in fixed exposure at constant rate $\to\Pois(\lambda t)$.
+\item Every listed value genuinely equally likely $\to$ discrete uniform.
+\end{itemize}
+\trap{Without replacement is generally not binomial. Binomial fixes trials; negative binomial fixes the required number of successes.}
+
+\subh{Series that actually occur}
+For $|r|<1$,
+\[
+\sum_{k=0}^{n}r^k=\frac{1-r^{n+1}}{1-r},\quad
+\sum_{k=0}^{\infty}r^k=\frac1{1-r},
+\]
+\[
+\sum_{k=m}^{\infty}r^k=\frac{r^m}{1-r},\qquad
+\sum_{k=1}^{\infty}kr^{k-1}=\frac1{(1-r)^2}.
+\]
+Use them for random experiment size, geometric tails, truncated waiting times and expectations containing $kr^{k-1}$.
+
+\begin{exbox}
+\textbf{Random $N$ (2025/2026 pattern).} If $N\sim\Geo(q)$ and winning given $N=n$ requires $n$ independent wins of probability $s$, then
+\[
+P(W)=\sum_{n\ge1}q(1-q)^{n-1}s^n=\frac{qs}{1-(1-q)s}.
+\]
+Condition first; do not replace $N$ by $E[N]$.
+\end{exbox}
+Once $p_0=P(\text{win one complete game})$ is known, playing independent full games until the $r$th win gives $G\sim\NB(r,p_0)$ and $E[G]=r/p_0$.
+
+\subh{Tail-sum identity}
+For any nonnegative integer-valued $X$,
+\[
+E[X]=\sum_{k=1}^{\infty}P(X\ge k).
+\]
+For $Y=\min(X,m)$, truncate the sum at $m$.
+
+\subh{Capped geometric waiting time}
+If $W\sim\Geo(p)$ but the experiment stops after $m$ trials, write $Y=\min(W,m)$. Then for $k\le m$, $P(Y\ge k)=P(W\ge k)=(1-p)^{k-1}$, so
+\[
+E[Y]=\sum_{k=1}^{m}P(Y\ge k)=\frac{1-(1-p)^m}{p}.
+\]
+This avoids listing the full PMF; the mass at $m$ absorbs $P(W\ge m)$.
+
+\sect{3. Discrete PMF/CDF and hidden composition}
+A PMF assigns mass; the CDF accumulates it. \hebref{פונקצית\ ההתפלגות\ המצטברת}
+For discrete $X$, $P(a<X\le b)=F(b)-F(a)$ and $P(X>k)=1-F(k)$. Always state the support.
+
+\begin{exbox}
+\textbf{Hidden composition $\to$ sample (2025).} If $Y$ is the random number of type-A items among $N$, and $n$ items are sampled without replacement, then
+\[
+X\mid Y=y\sim\HG(N,y,n),\qquad E[X\mid Y]=\frac{ny}{N}.
+\]
+Hence $E[X]=nE[Y]/N$ without deriving the unconditional PMF.
+\end{exbox}
+A discrete joint table is a map of feasible pairs: impossible cells are zero; row/column sums give marginals; a conditional row is joint divided by the conditioning marginal and must sum to $1$.
+
+\subh{iid symmetry}
+If independent $X,Y$ have the same distribution,
+\[
+\begin{aligned}
+P(Y>X)&=P(X>Y)=\tfrac12\{1-P(X=Y)\},\\
+P(X=Y)&=\sum_kP(X=k)^2.
+\end{aligned}
+\]
+
+\sect{4. Indicators, covariance and bounds}
+Indicators turn a difficult count into a sum of simple $0/1$ variables. If $Y=\sum I_i$ with $I_i=\mathbf1_{A_i}$, then
+\[
+E[Y]=\sum_iP(A_i)
+\]
+without any independence assumption. \hebref{אינדיקטורים}
+For variance, dependence matters:
+\[
+\Var(Y)=\sum_i p_i(1-p_i)+2\sum_{i<j}\Cov(I_i,I_j),
+\]
+\[
+\Cov(I_i,I_j)=P(A_i\cap A_j)-p_ip_j.
+\]
+Classify pairs by overlap, compute one joint probability for each class, and count how many such pairs exist.
+
+\begin{exbox}
+\textbf{Adjacent-comparison pattern (2026).} $I_i=\mathbf1_{\{X_i<X_{i+1}\}}$ for iid continuous $X_i$. Then $P(I_i=1)=1/2$. Adjacent indicators overlap:
+$P(X_i<X_{i+1}<X_{i+2})=1/6$, so $\Cov(I_i,I_{i+1})=1/6-1/4=-1/12$; nonadjacent pairs are independent.
+\end{exbox}
+\subh{Bounds}
+Markov uses only nonnegativity and a mean: $P(X\ge a)\le E[X]/a$. \hebref{אי\ שוויון\ מרקוב}
+Chebyshev uses mean and variance: $P(|X-\mu|\ge a)\le\sigma^2/a^2$. \hebref{אי\ שוויון\ צ׳בישב}
+A requested lower bound is often obtained by complementing the upper-tail bound.
+
+\subh{Exact, bound or approximation?}
+Use an exact law/integral when it is short. Use Markov or Chebyshev when only moments are available or dependence blocks the exact distribution. Use a normal approximation only for a genuinely large count/sum after checking its assumptions. A bound is not an estimated probability.
+
+\subh{Random sum/reward}
+If $S=\sum_{i=1}^{N}W_i$, where the iid rewards are independent of $N$, conditioning gives
+\[
+\begin{aligned}
+E[S]&=E[N]E[W],\\
+\Var(S)&=E[N]\Var(W)+\Var(N)E[W]^2.
+\end{aligned}
+\]
+The second term is the variation caused by the random number of rewards.
+
+\sect{5. Poisson process: counts, times and structure}
+Let $N(t)$ count arrivals by time $t$ at rate $\lambda$ per unit time.
+\begin{flowbox}
+\textbf{Count or waiting time?} Number in interval length $t$: $N(t)\sim\Pois(\lambda t)$. Time to next arrival: $T\sim\Exp(\lambda)$. Convert minutes/hours before multiplying the rate.
+\end{flowbox}
+Stationary increments mean only interval length matters; independent increments mean disjoint intervals contribute independent counts. This is why a timeline can be split into independent pieces.
+
+Independent Poisson processes superpose: rates add because expected event counts add over every interval. Thinning keeps each event with probability $p$, giving an independent Poisson process of rate $p\lambda$; different categories are independent. Given $N(T)=n$, the labeled arrival locations are iid $U(0,T)$; the ordered arrival times are their order statistics. Therefore a subinterval occupying fraction $a$ of the full interval contains $\Bin(n,a)$ arrivals.
+
+Interarrival times are iid exponential and memoryless. The $k$th arrival time is a sum of $k$ exponentials, but the event translation
+\[
+T_k\le t\iff N(t)\ge k
+\]
+is often faster than deriving its density. The minimum of independent exponentials with rates $\lambda_i$ is $\Exp(\sum_i\lambda_i)$; the next event is type $j$ with probability $\lambda_j/\sum_i\lambda_i$.
+
+\begin{exbox}
+\textbf{Thinned revenue (2025).} Arrivals have rate $\lambda$; type $i$ has probability $p_i$ and reward $c_i$. Over time $t$, independent $N_i\sim\Pois(\lambda tp_i)$ and $R=\sum c_iN_i$, so
+\[
+E[R]=\lambda t\sum c_ip_i,\qquad \Var(R)=\lambda t\sum c_i^2p_i.
+\]
+Square rewards, not probabilities, in the variance.
+\end{exbox}
+
+\subh{Poisson count during a random time}
+If $N\mid T=t\sim\Pois(\lambda t)$ and $T$ is independent of the process, then
+\[
+\begin{aligned}
+E[N]&=\lambda E[T],\\
+\Var(N)&=\lambda E[T]+\lambda^2\Var(T),\\
+\Cov(N,T)&=\lambda\Var(T).
+\end{aligned}
+\]
+These follow by conditioning; they avoid finding the marginal law of $N$.
+
+\subh{Overlapping intervals}
+For counts from the same process on intervals $I$ and $J$, split the timeline into disjoint pieces. Only the shared piece contributes to both counts, hence
+\[
+\Cov(N(I),N(J))=\lambda\,|I\cap J|.
+\]
+This is the count analogue of overlapping indicators.
+
+\subh{Conditioning can remove the rate}
+Given $N(T)=n$, the original rate no longer matters for arrival positions. Thus a half-interval subcount is $\Bin(n,1/2)$, and if exactly one arrival occurred, its time is uniform on the interval. If $A$ is ``at least one type-1 arrival'' and each arrival is type 1 with probability $p$, then
+\[
+P(A\mid N=n)=1-(1-p)^n.
+\]
+Use this likelihood with Bayes to find the conditional law of $N$ given $A$.
+
+\sect{6. Two-dimensional continuous variables: support first}
+The support picture controls every limit. A marginal is a \emph{projection}: fix the required variable and integrate over the full allowed slice of the other. A conditional density is the normalized slice at the conditioning value, so its support usually changes with that value.
+
+\begin{flowbox}
+\textbf{Reliable order:} draw/describe $S$; find boundary intersections; normalize if needed; choose vertical or horizontal slices; write limits from the picture; integrate over $S\cap$ event; state zero outside the resulting support.
+\end{flowbox}
+\subh{Marginal and conditional densities}
+\hebref{צפיפות\ שולית}\quad \hebref{צפיפות\ מותנה}
+\[
+\begin{aligned}
+f_X(x)&=\int_{\{y:(x,y)\in S\}}f(x,y)\,dy,\\
+f_{Y\mid X=x}(y)&=\frac{f(x,y)}{f_X(x)}.
+\end{aligned}
+\]
+The denominator is a density value, not $P(X=x)$. Verify the conditional density integrates to $1$ on the fixed-$x$ slice.
+
+\subh{Vertical versus horizontal slices}
+For $S=\{0<y<x<1\}$,
+\[
+f_X(x)=\int_0^x f(x,y)dy,
+\qquad
+f_Y(y)=\int_y^1 f(x,y)dx.
+\]
+The same region gives different limits because the outer variable is fixed in a different direction.
+
+\begin{exbox}
+\textbf{Uniform point in a region (2025).} If $f=c$ on $0<x<1$, $1-x<y<x+2$, then area $=2$, so $c=1/2$. The vertical slice length is $(x+2)-(1-x)=2x+1$; therefore
+\[
+f_X(x)=\tfrac12(2x+1)=x+\tfrac12,\quad 0<x<1.
+\]
+For a uniform region, probabilities are area ratios and marginals are density $\times$ slice length.
+\end{exbox}
+
+\subh{Curved boundaries and piecewise limits}
+When reversing order, solve the boundary for the inner variable and intersect with all original bounds. For $y<x^2$: if $y<0$, every real $x$ satisfies the inequality; if $y\ge0$, then $x<-\sqrt y$ or $x>\sqrt y$. With an original restriction $x\ge0$, only $x>\sqrt y$ remains. Breakpoints appear where candidate bounds cross or where a curve reaches an endpoint.
+
+\begin{exbox}
+\textbf{Q3 continued -- curved-support template.} If $1<x<2$ and $0<y<x^2$, then $0<y<4$. For fixed $y$, $x$ must satisfy $x>\sqrt y$ and $1<x<2$: use $1<x<2$ for $0<y<1$, but $\sqrt y<x<2$ for $1<y<4$. The breakpoint $y=1$ comes from the endpoint $x=1$.
+\end{exbox}
+
+\subh{Independence and event regions}
+If the density is positive on a support that is not a Cartesian product $S_X\times S_Y$, independence is impossible. If the support is a product, factorization $f=f_Xf_Y$ must still be checked. Event probabilities require integrating over the intersection of the event with $S$; for conditional events, numerator uses both conditions and denominator uses the given condition.
+\trap{Factoring the algebra is not enough when the support couples $x$ and $y$. Zero covariance does not generally imply independence.}
+
+\subh{Choosing integration order}
+Choose the order that makes $S\cap A$ easiest to describe. If one order needs several pieces and the other needs one, switch. A safe recipe is to convert every condition into lower/upper bounds on the inner variable, then use $\max\{\text{lowers}\}<\min\{\text{uppers}\}$ and split where the winner changes.
+
+\sect{7. Conditional expectation and covariance}
+Conditioning is especially valuable when $Y\mid X=x$ belongs to a familiar family. Then its conditional mean or second moment can be inserted before averaging:
+\[
+E[Y]=E(E[Y\mid X]),\qquad E[Y^2]=E(E[Y^2\mid X]),
+\]
+\[
+\Var(Y)=E[Y^2]-E[Y]^2.
+\]
+\ex{If $Y\mid X=x\sim\Pois(10x)$, then $E[Y\mid X]=10X$ and $E[Y]=10E[X]$ without deriving $f_Y$.}
+For joint moments,
+\[
+E[g(X,Y)]=\iint_Sg(x,y)f(x,y)dxdy,
+\]
+and $\Cov(X,Y)=E[XY]-E[X]E[Y]$. \hebref{שונות\ משותפת}
+Conditional symmetry can save work: if $X\mid Y=y$ is symmetric around $0$, then $E[X\mid Y]=0$ and odd conditional moments vanish.
+
+When the conditional variance is easy, the decomposition
+\[
+\Var(Y)=E[\Var(Y\mid X)]+\Var(E[Y\mid X])
+\]
+separates randomness inside each case from randomness between cases. For $Y\mid X\sim\Pois(\lambda X)$, both the conditional mean and variance are $\lambda X$.
+
+\sect{8. Sums, extrema and transformations}
+\subh{Which method?}
+Independent sum with known densities $\to$ convolution; maximum/minimum $\to$ CDF events; one-variable transformation $Y=g(X)$ $\to$ CDF method when unsure; conditional model simple $\to$ condition rather than derive a difficult marginal.
+
+\subh{Convolution} \hebref{צפיפות\ סכום/הפרש}
+For $Z=X+Y$, use the supplied formula, but first find the possible $z$-range. For fixed $z$, require both $x\in S_X$ and $z-x\in S_Y$; equivalently, integrate over $\max\{\text{lower bounds}\}<x<\min\{\text{upper bounds}\}$. Split where active endpoints change.
+\ex{If $X,Y\sim U(0,1)$ independently, then $\max(0,z-1)<x<\min(1,z)$, giving one expression on $0<z<1$ and another on $1<z<2$.}
+
+\subh{Extrema and transforms}
+For iid $X_i$, $P(\max X_i\le t)=F(t)^n$ and $P(\min X_i>t)=[1-F(t)]^n$. Differentiate only after the complete piecewise CDF. For $Y=g(X)$, write $F_Y(y)=P(g(X)\le y)$; if $g$ is not one-to-one, split into inverse branches and add their contributions. Always derive the transformed support.
+
+\subh{Known closure before calculation}
+Independent Poisson variables add to a Poisson with summed parameters. Independent normals remain normal with means added linearly and variances multiplied by squared coefficients. Use these closures before convolution or MGF algebra. For a difference, variances still add under independence.
+
+\sect{9. Approximation selector and normal workflow}
+\begin{flowbox}
+\textbf{Original binomial:} current-course rare-event rule $n\ge50$ and $np<5$ $\to\Pois(np)$; if $np\ge5$ and $n(1-p)\ge5$, use $N(np,np(1-p))$.\\
+\textbf{Original Poisson:} for sufficiently large $\lambda$, use $N(\lambda,\lambda)$; the current material gives no numerical cutoff.\\
+\textbf{General iid sum/mean:} check iid and finite mean/variance, compute one unit's moments, then CLT.
+\end{flowbox}
+For every normal approximation: (1) name the exact original law; (2) compute $\mu=E[X]$, $\sigma^2=\Var(X)$, $\sigma$; (3) define $Y\sim N(\mu,\sigma^2)$; (4) continuity-correct if the original variable is discrete; (5) standardize; (6) use the supplied $Z$-table.
+\[
+\begin{aligned}
+P(X\le k)&\approx P(Y\le k+0.5),\\
+P(X\ge k)&\approx P(Y\ge k-0.5).
+\end{aligned}
+\]
+The table gives $\Phi(z)=P(Z\le z)$; right tail $=1-\Phi(z)$, interval $=\Phi(b)-\Phi(a)$, and $\Phi(-z)=1-\Phi(z)$.
+
+\begin{exbox}
+\textbf{Poisson $\to$ normal.} $X\sim\Pois(60)$ and $P(X>80)=P(X\ge81)$. Let $Y\sim N(60,60)$:
+\[
+\begin{aligned}
+P(X>80)&\approx P(Y>80.5)\\
+&=P\!\left(Z>\frac{80.5-60}{\sqrt{60}}\right).
+\end{aligned}
+\]
+\end{exbox}
+
+\begin{exbox}
+\textbf{Binomial choices.} If $X\sim\Bin(1000,0.002)$, the course rare-event rule supports $\Pois(2)$. If $X\sim\Bin(60,1/6)$, then $np=10$ and $n(1-p)=50$, so normal approximation is allowed: $Y\sim N(10,50/6)$ and continuity correction is applied before standardizing.
+\end{exbox}
+\subh{Reading the supplied $Z$-table}
+The table is a left-tail table. For $z=2.65$, use row $2.6$ and column $.05$ to get $\Phi(2.65)$. A right tail is $1-\Phi(z)$; an interval is $\Phi(b)-\Phi(a)$. Standardize first and keep the inequality direction visible.
+
+\sect{10. LLN, CLT and exact normal closure}
+The LLN tells where a long-run average settles: for iid variables satisfying the course's moment assumptions, $\bar X_n\to\mu$ in probability (and the strong law gives almost-sure convergence). It does not by itself give a numerical tail probability.
+
+The CLT describes fluctuations around that value:
+\[
+S_n\approx N(n\mu,n\sigma^2),\qquad \bar X_n\approx N(\mu,\sigma^2/n).
+\]
+Define one repeated iid unit first. If $W_i=X_i-Y_i$, include the covariance inside one unit:
+\[
+\Var(W_i)=\Var X_i+\Var Y_i-2\Cov(X_i,Y_i).
+\]
+Independent normal sums are \emph{exactly} normal, so no large-$n$ argument is needed; means combine linearly and variances use squared coefficients.
+
+\begin{exbox}
+\textbf{Repeated-pair CLT (2026).} If $(X_i,Y_i)$ are iid pairs but $X_i$ and $Y_i$ are dependent within a pair, define $W_i=X_i-Y_i$. The $W_i$ are iid across $i$; compute $E[W_i]$ and $\Var(W_i)$ including $\Cov(X_i,Y_i)$, then apply the CLT to $\bar W=\bar X-\bar Y$. Do not approximate $\bar X$ and $\bar Y$ separately as if independent.
+\end{exbox}
+
+\sect{11. Moment-generating functions}
+An MGF packages all moments and often identifies a distribution. \hebref{פונקציה\ יוצרת\ מומנטים}
+\[
+M_X'(0)=E[X],\qquad M_X''(0)=E[X^2].
+\]
+For independent sums only, $M_{X+Y}=M_XM_Y$; match the product to a known MGF. For $aX+b$, $M_{aX+b}(t)=e^{bt}M_X(at)$. MGFs require existence in a neighborhood of $0$.
+\trap{Differentiate the MGF, not the log-MGF, to extract raw moments.}
+\ex{If $M_S(t)$ factors into $[M_X(t)]^n$, ask whether $S$ is a sum of $n$ independent copies. If the product matches a Poisson, normal or gamma-family MGF from the supplied sheet, identify the distribution rather than differentiating a long expression.}
+
+\sect{12. Statistics: parameter, statistic, estimator, estimate}
+A \textbf{parameter} is an unknown fixed feature of the population. A \textbf{statistic} is a function of the random sample containing no unknown parameter. An \textbf{estimator} is a statistic chosen to estimate a parameter; after data are observed, its numerical value is the \textbf{estimate}. \hebref{סטטיסטיקה}
+
+For iid data, $E[\bar X]=\mu$ and $\Var(\bar X)=\sigma^2/n$. The unbiased sample variance is
+\[
+S^2=\frac1{n-1}\sum_i(X_i-\bar X)^2.
+\]
+Bias and MSE measure estimator quality:
+\[
+\begin{aligned}
+\operatorname{Bias}(T)&=E[T]-\theta,\\
+\MSE(T)&=\Var(T)+\operatorname{Bias}(T)^2.
+\end{aligned}
+\]
+\hebref{אומד\ חסר\ הטייה}\quad \hebref{תוחלת\ ריבוע\ הטעות\ של\ אומד}
+
+\subh{Comparing estimators}
+Unbiasedness is not the only criterion. If $T_1$ is unbiased but variable and $T_2$ is slightly biased but concentrated, compare $\MSE$. Always evaluate expectations under the full model and for every allowed parameter value.
+
+\Needspace{12\baselineskip}
+\sect{13. Maximum likelihood estimation}
+MLE treats the observed data as fixed and varies the parameter: choose the parameter value under which those data are most plausible. \hebref{פונקצית\ נראות}
+The log-likelihood is used because products become sums and $\log$ preserves the maximizer.
+
+\begin{flowbox}
+\textbf{Regular versus support-driven MLE.} Write the parameter domain and the full PMF/PDF including support indicators. First determine which parameter values make every observation possible. If support is fixed, maximize $\ell=\log L$ by differentiation and compare boundaries. If support depends on the parameter, the admissible boundary may determine the answer before differentiation.
+\end{flowbox}
+Fast patterns:
+\[
+X_i\sim\operatorname{Ber}(p):\hat p=\bar X,
+\quad X\sim\Bin(m,p):\hat p=X/m,
+\]
+\[
+X_i\sim\Bin(m,p):\hat p=\bar X/m,
+\quad X_i\sim\Pois(\lambda):\hat\lambda=\bar X,
+\]
+\[
+X_i\sim\Exp(\lambda)\text{ (rate)}:\quad \hat\lambda=1/\bar X.
+\]
+
+\begin{exbox}
+\textbf{Boundary/support MLE.} If $X_i\sim U(0,\theta)$, the data require $\theta\ge x_{(n)}=\max x_i$. On that admissible set $L\propto\theta^{-n}$ decreases, so $\hat\theta=x_{(n)}$. The 2026 support example similarly gives a maximum absolute observation.
+\end{exbox}
+For iid $N(\mu,\sigma^2)$, if both parameters are unknown,
+\[
+\hat\mu=\bar X,
+\qquad
+\hat\sigma^2_{\rm MLE}=\frac1n\sum_i(X_i-\bar X)^2.
+\]
+The MLE denominator is $n$; the unbiased sample variance denominator is $n-1$.
+MLE invariance:
+\[
+\widehat{g(\theta)}_{\rm MLE}=g(\hat\theta_{\rm MLE}).
+\]
+\trap{Never discard a support indicator involving the parameter; a critical point outside the allowed domain is not an estimator.}
+
+\subh{Constrained interior solution}
+If $\ell$ is concave or unimodal and its unconstrained global maximizer is $a$, then over $\theta\in[L,U]$ the constrained maximizer is
+\[
+\hat\theta=\min\{U,\max\{L,a\}\}.
+\]
+Without concavity/unimodality, compare every feasible stationary point and both boundaries directly. Recent exams use this when a binomial success probability is an affine function of a constrained parameter.
+
+\subh{MLE followed by bias/MSE}
+A support-based MLE is often an extreme order statistic. For a continuous estimator, find its CDF and differentiate to obtain the density; for a discrete estimator, obtain its PMF from CDF differences or direct probabilities. Then compute $E[\hat\theta]$ and $E[\hat\theta^2]$, followed by $\MSE=\Var+\operatorname{Bias}^2$. This combines extrema, transformations and estimation in one question.
+
+\sect{14. Recurring exam moves}
+Random size/composition: condition first; a series may appear only in the final algebra. Complicated count: indicators for expectation, overlap classes for variance. Poisson: split a timeline into disjoint intervals/categories before superposition, thinning or conditioning. Two-dimensional density: support before algebra; projection for marginals, normalized slice for conditionals and intersection for events. MLE: domain and support before derivatives; compare boundaries globally.
+
+\subh{Small but recurring algebra}
+$\Var(aX+bY)=a^2\Var X+b^2\Var Y+2ab\Cov(X,Y)$. Independence implies zero covariance, but not conversely. A density may exceed $1$; a probability may not. Adding a constant changes the mean but not the variance.
+
+\sect{15. Official-sheet Hebrew lookup}
+\renewcommand{\arraystretch}{1.0}
+{\setlength{\tabcolsep}{1.0pt}\begin{tabular}{@{}p{.51\linewidth}p{.45\linewidth}@{}}
+\heb{צפיפות\ שולית} & marginal density\\
+\heb{צפיפות\ מותנה} & conditional density\\
+\heb{פונקצית\ ההתפלגות\ המצטברת} & CDF\\
+\heb{שונות\ משותפת} & covariance\\
+\heb{פונקציה\ יוצרת\ מומנטים} & MGF\\
+\heb{משפט\ הגבול\ המרכזי} & CLT\\
+\heb{פונקצית\ נראות} & likelihood\\
+\heb{אומד\ חסר\ הטייה} & unbiased estimator\\
+\end{tabular}}
+
+\sect{16. Final sanity check}
+\begin{warnbox}
+Support stated? PMF/PDF and conditional density normalize? Event intersected with the support? Units consistent? Dependence checked before adding variances? Continuity correction applied only to a discrete-to-normal approximation? Likelihood maximized only over allowed parameters? Probability in $[0,1]$, variance nonnegative, and piecewise answer completed with zero/one outside its support?
+\end{warnbox}
+
+\end{multicols}
+\end{document}
