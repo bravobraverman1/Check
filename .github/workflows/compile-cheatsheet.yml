@@ -1,0 +1,28 @@
+name: Compile probability cheat sheet
+
+on:
+  push:
+    paths:
+      - 'chatgpt-temp/TAU_Probability_Statistics_Final_Precision.tex'
+      - '.github/workflows/compile-cheatsheet.yml'
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: chatgpt-temp/TAU_Probability_Statistics_Final_Precision.tex
+          working_directory: .
+          latexmk_use_xelatex: false
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+      - name: Copy output
+        run: cp chatgpt-temp/TAU_Probability_Statistics_Final_Precision.pdf TAU_Probability_Statistics_Final_Precision.pdf
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: probability-cheat-sheet-pdf
+          path: TAU_Probability_Statistics_Final_Precision.pdf
